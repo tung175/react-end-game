@@ -40,3 +40,11 @@ export const postLogin = (email, password) => {
 export const postRegister = (email, password, username) => {
   return axios.post(`api/v1/register`, {email, password, username});
 };
+
+export const getQuizByUser = () => {
+  return axios.get(`api/v1/quiz-by-participant`)
+}
+
+export const getDataQuiz = (quizId) => {
+  return axios.get(`http://localhost:8081/api/v1/questions-by-quiz?quizId=${quizId}`)
+}

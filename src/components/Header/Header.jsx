@@ -25,9 +25,9 @@ const Header = (props) => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#link">User</Nav.Link>
-              <Nav.Link href="#link">Admin</Nav.Link>
+              <Nav.Link href="/">Home</Nav.Link>
+              <Nav.Link href="/user">User</Nav.Link>
+              <Nav.Link href="/admin">Admin</Nav.Link>
             </Nav>
             <Nav>
               {isAuthenticated === false ? (
@@ -41,8 +41,8 @@ const Header = (props) => {
                 </>
               ) : (
                 <NavDropdown title="Setting" id="basic-nav-dropdown">
-                  <NavDropdown.Item href="#action/3.1">Login</NavDropdown.Item>
-                  <NavDropdown.Item href="#action/3.2">Logout</NavDropdown.Item>
+                  <NavDropdown.Item href="/login">Login</NavDropdown.Item>
+                  <NavDropdown.Item href="/">Logout</NavDropdown.Item>
                   <NavDropdown.Item href="#action/3.3">
                     Profile
                   </NavDropdown.Item>

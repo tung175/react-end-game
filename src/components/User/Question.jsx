@@ -2,11 +2,13 @@ import _ from "lodash";
 
 const Question = (props) => {
   const { data, index, handleCheckboxPr } = props;
+  console.log(222, data);
   if (_.isEmpty(data)) {
     return <></>;
   }
 
   const handleCheckbox = (event, aId, qId) => {
+    console.log(333, aId, qId);
     handleCheckboxPr(aId, qId)
   }
   return (
@@ -32,7 +34,7 @@ const Question = (props) => {
                     className="form-check-input"
                     type="checkbox"
                     checked={item.isSelected}
-                    onChange={(event) => handleCheckbox(event, item.a, data.questionId)}
+                    onChange={(event) => handleCheckbox(event, item.id, +data.questionId)}
                   />
                   <label className="form-check-label">{item.description}</label>
                 </div>

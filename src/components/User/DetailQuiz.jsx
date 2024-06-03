@@ -36,6 +36,7 @@ const DetailQuiz = (props) => {
           return { questionId: key, answers, questionDescription, image };
         })
         .value();
+        console.log(111, data);
       setDataQuiz(data);
     }
   };
@@ -51,14 +52,14 @@ const DetailQuiz = (props) => {
     setIndex(index - 1);
   };
 
-  const handleCheckbox = (answersId, questionId) => {
+  const handleCheckbox = (answerId, questionId) => {
     let dataQuizClone = _.cloneDeep(dataQuiz);
     let question = dataQuizClone.find(
-      (item) => item.questionId === +questionId
+      (item) => +item.questionId === +questionId
     );
     if (question && question.answers) {
         question.answers = question.answers.map((item) => {
-        if (+item.id === +answersId) {
+        if (+item.id === +answerId) {
           item.isSelected = !item.isSelected;
         }
         return item;

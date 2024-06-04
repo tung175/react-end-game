@@ -19,8 +19,10 @@ import {
 import { DiReact } from "react-icons/di";
 import "react-pro-sidebar/dist/css/styles.css";
 import sidebarBg from "../../assets/bg2.jpg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 const SideBar = (props) => {
+  const navigate = useNavigate();
   const { collapsed, rtl, toggled, handleToggleSidebar } = props;
   return (
     <>
@@ -46,7 +48,7 @@ const SideBar = (props) => {
             }}
           >
             <DiReact size={"3em"} color={"000bfff"} />
-            <span>React End Game</span>
+            <span onClick={() => navigate("/")}>React End Game</span>
           </div>
         </SidebarHeader>
 
@@ -64,7 +66,11 @@ const SideBar = (props) => {
                 Quản lý người dùng
                 <Link to="/admin/manager-user" />
               </MenuItem>
-              <MenuItem> Quản lý bài Quiz</MenuItem>
+              <MenuItem>
+                {" "}
+                Quản lý bài Quiz
+                <Link to="/admin/manager-quizzes" />
+              </MenuItem>
               <MenuItem> Quản lý câu hỏi</MenuItem>
             </SubMenu>
           </Menu>

@@ -25,7 +25,7 @@ const Layout = (props) => {
         </Route>
         <Route path="/quiz/:id" element={<DetailQuiz />} />
 
-        <Route path="admin" element={<Admin />}>
+        <Route path="/admin" element={<Admin />}>
           <Route index element={<DashBoard />} />
           <Route path="manager-user" element={<ManagerUser />} />
           <Route path="manager-quizzes" element={<ManageQuiz />} />

@@ -32,11 +32,10 @@ const TableQuiz = (props) => {
   };
 
   const handleDelete = (quiz) => {
-    console.log(222, quiz);
     setIsShowModalDelete(true);
     setDataDelete(quiz);
   };
-  console.log(111, dataDelete);
+
   return (
     <>
       <div className="">List Quizzes</div>

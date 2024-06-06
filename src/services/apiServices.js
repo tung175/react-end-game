@@ -37,6 +37,10 @@ export const postLogin = (email, password) => {
   return axios.post(`api/v1/login`, { email, password, delay: 300 });
 };
 
+export const logout = (email, refresh_token) => {
+  return axios.post(`/api/v1/logout`, { email, refresh_token });
+};
+
 export const postRegister = (email, password, username) => {
   return axios.post(`api/v1/register`, { email, password, username });
 };
@@ -88,4 +92,37 @@ export const putUpdateQuizForAdmin = (
   form.append("userImage", image);
 
   return axios.put("api/v1/quiz", form);
+};
+
+export const postCreateNewQuestionForQuiz = (quiz_id, description, image) => {
+  const form = new FormData();
+  form.append("quiz_id", quiz_id);
+  form.append("description", description);
+  form.append("userImage", image);
+
+  return axios.post("api/v1/question", form);
+};
+
+export const postCreateNewAnswerQuestion = (
+  description,
+  correct_answer,
+  question_id
+) => {
+  return axios.post(`/api/v1/answer`, {
+    description,
+    correct_answer,
+    question_id,
+  });
+};
+
+export const postAssignQuiz = (quizId, userId) => {
+  return axios.post(`/api/v1/quiz-assign-to-user`, { quizId, userId });
+};
+
+export const getQuizWithQA = (quizId) => {
+  return axios.get(`/api/v1/quiz-with-qa/${quizId}`);
+};
+
+export const postUpsertQA = (data) => {
+  return axios.post(`/api/v1/quiz-upsert-qa`, { ...data });
 };

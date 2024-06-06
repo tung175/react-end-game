@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import Select from "react-select";
-import "./Questions.scss";
+import "./QuizQA.scss";
 import { BsTrash, BsPlusSquareFill } from "react-icons/bs";
 import { AiOutlinePlusCircle, AiOutlineMinusCircle } from "react-icons/ai";
 import { RiImageAddFill } from "react-icons/ri";
@@ -10,11 +10,13 @@ import Lightbox from "react-awesome-lightbox";
 import { toast } from "react-toastify";
 import {
   getAllQuizForAdmin,
+  getQuizWithQA,
   postCreateNewAnswerQuestion,
   postCreateNewQuestionForQuiz,
+  postUpsertQA,
 } from "../../../../services/apiServices";
 
-const Questions = (props) => {
+const QuizQA = (props) => {
   const initQuestions = [
     {
       id: uuidv4(),
@@ -42,6 +44,39 @@ const Questions = (props) => {
   useEffect(() => {
     fetchQuiz();
   }, []);
+
+  useEffect(() => {
+    if (selectedQuiz && selectedQuiz.value) {
+      fetchQuizWithQA();
+    }
+  }, [selectedQuiz]);
+
+  const urlToFile = (url, filename, mimeType) => {
+    return fetch(url)
+      .then((res) => res.arrayBuffer())
+      .then((buf) => new File([buf], filename, { type: mimeType }));
+  };
+
+  const fetchQuizWithQA = async () => {
+    let res = await getQuizWithQA(selectedQuiz.value);
+    if (res && res.EC === 0) {
+      let newQA = [];
+      for (let i = 0; i < res.DT.qa.length; i++) {
+        let q = res.DT.qa[i];
+        if (q.imageFile) {
+          q.imageName = `Question - ${q.id}.png`;
+          q.imageFile = await urlToFile(
+            `data:image/png;base64,${q.imageFile}`,
+            `Question - ${q.id}.png`,
+            `image/png`
+          );
+        }
+        newQA.push(q);
+      }
+      setQuestion(newQA);
+      console.log(res);
+    }
+  };
 
   const fetchQuiz = async () => {
     let res = await getAllQuizForAdmin();
@@ -200,39 +235,32 @@ const Questions = (props) => {
     if (isValidQuestion === false) {
       toast.error(`Not empty description for Question ${indexQuestion + 1}`);
     }
-    for (const quest of question) {
-      const q = await postCreateNewQuestionForQuiz(
-        +selectedQuiz.value,
-        quest.description,
-        quest.imageFile
-      );
-      for (const answer of quest.answers) {
-        await postCreateNewAnswerQuestion(
-          answer.description,
-          answer.isCorrect,
-          q.DT.id
-        );
+
+    let questionClone = _.cloneDeep(question);
+    for (let i = 0; i < questionClone.length; i++) {
+      if (questionClone[i].imageFile) {
+        questionClone[i].imageFile = await toBase64(questionClone[i].imageFile);
       }
     }
-    toast.success("Create question and answers succeed")
-    setQuestion(initQuestions)
-    // await Promise.all(
-    //   question.map(async (question) => {
-    //     const q = await postCreateNewQuestionForQuiz(
-    //       +selectedQuiz.value,
-    //       question.description,
-    //       question.imageFile
-    //     );
-    //     await Promise.all(question.answers.map(async (answer) => {
-    //       await postCreateNewAnswerQuestion(
-    //         answer.description,
-    //         answer.isCorrect,
-    //         q.DT.id
-    //       )
-    //     }));
-    //   })
-    // );
+
+    let res = await postUpsertQA({
+      quizId: selectedQuiz.value,
+      questions: questionClone,
+    });
+
+    if (res && res.EC === 0) {
+      toast.success(res.EM);
+      fetchQuizWithQA();
+    }
   };
+
+  const toBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+    });
 
   const handlePreviewImage = (questionId) => {
     let questionsClone = _.cloneDeep(question);
@@ -248,13 +276,11 @@ const Questions = (props) => {
 
   return (
     <div className="questions-container">
-      <div className="title">Manage Questions</div>
-      <hr />
       <div className="add-new-question">
         <div className="col-6 form-group">
           <label className="mb-2">Select Quiz:</label>
           <Select
-          defaultValue={selectedQuiz}
+            defaultValue={selectedQuiz}
             onChange={setSelectedQuiz}
             options={listQuiz}
           />
@@ -401,4 +427,4 @@ const Questions = (props) => {
   );
 };
 
-export default Questions;
+export default QuizQA;

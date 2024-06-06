@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "./components/Header/Header";
 import { Outlet } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
+import PerfectScrollbar from "react-perfect-scrollbar";
 
 const App = () => {
   const count = useSelector((state) => state.counter.count);
@@ -16,7 +17,9 @@ const App = () => {
       <div className="main-content">
         <div className="sidenav-container">{/* <AppRoutes/> */}</div>
         <div className="app-content">
-          <Outlet />
+          <PerfectScrollbar>
+            <Outlet />
+          </PerfectScrollbar>
         </div>
       </div>
     </div>

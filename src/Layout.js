@@ -8,7 +8,7 @@ import Admin from "./components/Admin/Admin";
 import DashBoard from "./components/Admin/content/DashBoard";
 import ManagerUser from "./components/Admin/content/ManagerUser";
 import Login from "./components/Auth/Login";
-import React from "react";
+import React, { Suspense } from "react";
 import Register from "./components/Auth/Register";
 import ListQuiz from "./components/User/ListQuiz";
 import DetailQuiz from "./components/User/DetailQuiz";
@@ -18,7 +18,7 @@ import PrivateRoute from "./routes/PrivateRoute";
 
 const Layout = (props) => {
   return (
-    <>
+    <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<HomePage />} />
@@ -62,7 +62,7 @@ const Layout = (props) => {
         pauseOnHover
         theme="light"
       />
-    </>
+    </Suspense>
   );
 };
 

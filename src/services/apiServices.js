@@ -126,3 +126,5 @@ export const getQuizWithQA = (quizId) => {
 export const postUpsertQA = (data) => {
   return axios.post(`/api/v1/quiz-upsert-qa`, { ...data });
 };
+
+
